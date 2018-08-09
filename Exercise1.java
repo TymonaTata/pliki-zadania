@@ -1,35 +1,32 @@
 package pl.swieczkowski.operacje_na_plikach;
 
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 public class Exercise1 {
     public final static String EXIT = "-";
-    public static void main(String[] args) throws IOException {
+
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String lineToWrite = "";
-        FileWriter fileWriter = null;
-        boolean nextLine = true;
         System.out.println("Podaj scieżkę dostępu do pliku:");
         String filePath = sc.nextLine();
-        try{
-            fileWriter = new FileWriter(filePath);
-            while(nextLine){
-                System.out.println("Wprowadź linie tekstu do pliku lub wprowadź \"-\" aby zakończyć zapisywanie." );
+        try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter(filePath))) {
+            while (true) {
+                System.out.println("Wprowadź linie tekstu do pliku lub wprowadź \"-\" aby zakończyć zapisywanie.");
                 lineToWrite = sc.nextLine();
-                if(lineToWrite.equals(EXIT)){
+                if (lineToWrite.equals(EXIT)) {
                     System.out.println("Zakończono wprowadzanie tekstu do pliku");
-                    nextLine = false;
+                    break;
                 } else {
                     fileWriter.write(lineToWrite);
                     fileWriter.write(System.lineSeparator());
                 }
             }
-        } finally {
-            if (fileWriter != null){
-                fileWriter.close();
-            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

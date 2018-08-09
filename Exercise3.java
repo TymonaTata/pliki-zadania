@@ -1,12 +1,13 @@
 package pl.swieczkowski.operacje_na_plikach;
 
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
 public class Exercise3 {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         int day;
         int month;
@@ -21,17 +22,14 @@ public class Exercise3 {
         System.out.println("Podaj rok swoich urodzin:");
         year = sc.nextInt();
 
-        DataOutputStream outputStream = null;
-
-        try {
-            outputStream = new DataOutputStream(new FileOutputStream(filePath));
+        try (DataOutputStream outputStream = new DataOutputStream(new FileOutputStream(filePath))) {
             outputStream.writeInt(day);
             outputStream.writeInt(month);
             outputStream.writeInt(year);
-        } finally {
-            if (outputStream != null) {
-                outputStream.close();
-            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
 
